@@ -5,7 +5,7 @@
 
 #Persistence
 
-#####SCHTASKS
+##### SCHTASKS
 
 
 ```	
@@ -23,7 +23,7 @@
 ```
 
 
-####Download & Execute (Persistence)
+#### Download & Execute (Persistence)
 
 ```
 	#(X86) - On User Login
@@ -55,7 +55,7 @@
 
 
 
-#####Application Whitelisting Bypass Techniques
+##### Application Whitelisting Bypass Techniques
 
 ```
 
