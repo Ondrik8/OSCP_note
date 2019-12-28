@@ -1,9 +1,11 @@
-## my OSCP_note
+# my OSCP_note
 
 
--Persistence
 
-SCHTASKS
+
+#Persistence
+
+#####SCHTASKS
 
 
 ```	
@@ -21,7 +23,7 @@ SCHTASKS
 ```
 
 
--Download & Execute (Persistence)
+####Download & Execute (Persistence)
 
 ```
 	#(X86) - On User Login
@@ -53,7 +55,7 @@ SCHTASKS
 
 
 
--Application Whitelisting Bypass Techniques
+#####Application Whitelisting Bypass Techniques
 
 ```
 
@@ -119,9 +121,9 @@ https://www.defcon.org/images/defcon-21/dc-21-presentations/Bialek/DEFCON-21-Bia
 ```
 
 
--up my server
+#up my server
 
-# Linux
+#### Linux
 
 ```
 
@@ -134,8 +136,4 @@ ruby -r webrick -e "WEBrick::HTTPServer.new(:Port => 80, :DocumentRoot => Dir.pw
 php -S 0.0.0.0:80
 
 ```
-
-
-
-
 
