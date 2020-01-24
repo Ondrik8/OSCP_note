@@ -1,7 +1,10 @@
 # my OSCP_note
 
+generate SHELLCODE in msfvenom
 
-
+```
+msfvenom -p windows/x64/exec cmd=calc.exe EXITFUNC=thread -f c -v shellcode
+```
 
 #Persistence
 
