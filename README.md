@@ -1,5 +1,11 @@
 # my OSCP_note
 
+
+#### bypass-the-powershell-execution-policy
+
+https://blog.netspi.com/15-ways-to-bypass-the-powershell-execution-policy/
+
+
 generate SHELLCODE in msfvenom
 
 ```
