@@ -1,7 +1,7 @@
 # my OSCP_note
 
 
-![hot](https://i.gifer.com/3MeP.mp4)
+![hot](https://i.gifer.com/3MeP.gif)
 
 
  скрипт будет собирать следующую информацию:
